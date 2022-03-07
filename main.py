@@ -2,6 +2,31 @@ import random
 import numpy as np
 import time
 
+import pygame
+import pygame as py
+
+WIDTH = 5
+HEIGHT = 5
+MARGIN = 1
+
+DIMENSION = 100
+
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+
+
+py.init()
+
+WIN_SIZE = (600, 600)
+
+screen = py.display.set_mode(WIN_SIZE)
+py.display.set_caption("Conways Game of Life")
+
+clock = py.time.Clock()
+
+
 def dead_state(width, height):
     #dead_state is a function that creates an array containing 0's of given size
     #Input: Width of the array
@@ -89,15 +114,36 @@ def render(board):
 
 
 
+
 def main():
 
-    board = random_state(50, 50)
+    board = random_state(DIMENSION, DIMENSION)
+    done = False
 
+    while not done:
 
-    while True:
-        render(board)
+        for event in py.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+
+        screen.fill(BLACK)
+
+        for r in range(DIMENSION):
+            for c in range(DIMENSION):
+                colour = WHITE
+                if board[r][c] == 1:
+                    colour = GREEN
+                    py.draw.rect(screen, colour, [(MARGIN + WIDTH) * c + MARGIN,
+                              (MARGIN + HEIGHT) * r + MARGIN,
+                              WIDTH,
+                              HEIGHT])
+
+        # render(board)
         board = next_board_state(board)
-        time.sleep(0.5)
+        clock.tick(60)
+        py.display.flip()
+        #time.sleep(0.1)
+
 
 
 if __name__ == '__main__':
